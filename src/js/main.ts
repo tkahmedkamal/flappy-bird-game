@@ -1,14 +1,22 @@
 import Phaser from "phaser";
 import { PreloadScene } from "./scenes";
-
-const config = {
-  width: 600,
-  height: 850,
-};
+import { GameScene } from "./scenes";
+import { HEIGHT, WIDTH } from "./constants";
 
 new Phaser.Game({
-  ...config,
   type: Phaser.AUTO,
   backgroundColor: "#5DC7FD",
-  scene: [new PreloadScene(config)],
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: WIDTH,
+    height: HEIGHT,
+  },
+  physics: {
+    default: "arcade",
+    arcade: {
+      debug: process.env.NODE_ENV !== "production",
+    },
+  },
+  scene: [PreloadScene, GameScene],
 });
