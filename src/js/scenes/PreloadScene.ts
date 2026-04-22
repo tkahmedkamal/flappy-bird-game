@@ -2,6 +2,7 @@ import {
   BIRD_HEIGHT,
   BIRD_WIDTH,
   CLOUDS_HEIGHT,
+  CLOUDS_WIDTH,
   GROUND_HEIGHT,
   GROUND_WIDTH,
   SCENES_KEYS,
@@ -22,8 +23,8 @@ class PreloadScene extends Phaser.Scene {
     });
 
     this.load.spritesheet(SPRITE_KEYS.clouds, "assets/clouds.png", {
-      frameWidth: 209,
-      frameHeight: Math.min(this.scale.height * 0.6, CLOUDS_HEIGHT),
+      frameWidth: CLOUDS_WIDTH,
+      frameHeight: CLOUDS_HEIGHT,
       startFrame: 0,
     });
 

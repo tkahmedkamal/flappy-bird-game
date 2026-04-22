@@ -26,6 +26,12 @@ class MainScene extends Phaser.Scene {
       height: Math.min(this.scale.height * 0.6, CLOUDS_HEIGHT),
     });
 
+    this.#clouds.displayHeight = Math.min(
+      this.scale.height * 0.6,
+      CLOUDS_HEIGHT,
+    );
+    this.#clouds.scaleX = this.#clouds.scaleY;
+
     this.physics.add.existing(this.ground, true);
     this.createBirdAnimations();
   }
