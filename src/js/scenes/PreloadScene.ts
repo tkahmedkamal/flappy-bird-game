@@ -1,71 +1,42 @@
-import { SPRITE_KEYS } from "../constants";
+import {
+  BIRD_HEIGHT,
+  BIRD_WIDTH,
+  CLOUDS_HEIGHT,
+  GROUND_HEIGHT,
+  GROUND_WIDTH,
+  SCENES_KEYS,
+  SPRITE_KEYS,
+} from "../constants";
 
 class PreloadScene extends Phaser.Scene {
-  #ground: TileSprite = null;
-  #clouds: TileSprite = null;
-  #config: GameConfig = null;
-
-  constructor(config: GameConfig) {
-    super("PreloadScene");
-    this.#config = config;
+  constructor() {
+    super(SCENES_KEYS.preloadScene);
   }
 
   preload() {
     this.load.spritesheet(SPRITE_KEYS.ground, "assets/grounds.png", {
-      frameWidth: 120,
-      frameHeight: 120,
+      frameWidth: GROUND_WIDTH,
+      frameHeight: GROUND_HEIGHT,
       startFrame: 0,
       endFrame: 2,
     });
 
     this.load.spritesheet(SPRITE_KEYS.clouds, "assets/clouds.png", {
       frameWidth: 209,
-      frameHeight: 450,
+      frameHeight: Math.min(this.scale.height * 0.6, CLOUDS_HEIGHT),
       startFrame: 0,
+    });
+
+    this.load.spritesheet(SPRITE_KEYS.bird, "assets/birds.png", {
+      frameWidth: BIRD_WIDTH,
+      frameHeight: BIRD_HEIGHT,
+      startFrame: 0,
+      endFrame: 5,
     });
   }
 
   create() {
-    const configWidth = Number(this.#config.width || 0);
-    const configHeight = Number(this.#config.height || 0);
-
-    this.#ground = this.createScrollingBg({
-      key: SPRITE_KEYS.ground,
-      x: 0,
-      y: configHeight,
-      width: configWidth,
-      height: 120,
-      depth: 2,
-    });
-
-    this.#clouds = this.createScrollingBg({
-      key: SPRITE_KEYS.clouds,
-      x: 0,
-      y: configHeight,
-      width: configWidth,
-      height: 450,
-    });
-  }
-
-  update() {
-    this.#ground.tilePositionX += 1;
-    this.#clouds.tilePositionX += 0.4;
-  }
-
-  createScrollingBg({
-    key,
-    x,
-    y,
-    width,
-    height,
-    depth = 1,
-  }: TileSpriteParams): TileSprite {
-    const tileSprite = this.add
-      .tileSprite(x, y, width, height, key)
-      .setOrigin(0, 1)
-      .setDepth(depth);
-
-    return tileSprite;
+    this.scene.start(SCENES_KEYS.playScene);
   }
 }
 
