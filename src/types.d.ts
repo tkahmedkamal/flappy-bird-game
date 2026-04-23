@@ -3,6 +3,8 @@ import type { SPRITE_KEYS } from "./js/constants";
 declare global {
   type TileSprite = Phaser.GameObjects.TileSprite;
 
+  type Sprite = Phaser.Physics.Arcade.Sprite;
+
   type GameConfig = Phaser.Types.Core.GameConfig;
 
   type SpriteKey = (typeof SPRITE_KEYS)[keyof typeof SPRITE_KEYS];

@@ -5,6 +5,8 @@ import {
   CLOUDS_WIDTH,
   GROUND_HEIGHT,
   GROUND_WIDTH,
+  PIPE_HEIGHT,
+  PIPE_WIDTH,
   SCENES_KEYS,
   SPRITE_KEYS,
 } from "../constants";
@@ -33,6 +35,13 @@ class PreloadScene extends Phaser.Scene {
       frameHeight: BIRD_HEIGHT,
       startFrame: 0,
       endFrame: 5,
+    });
+
+    this.load.spritesheet(SPRITE_KEYS.pipe, "assets/pipes.png", {
+      frameWidth: PIPE_WIDTH,
+      frameHeight: PIPE_HEIGHT,
+      startFrame: 2,
+      endFrame: 3,
     });
   }
 

@@ -2,7 +2,7 @@ import { CLOUDS_HEIGHT, GROUND_HEIGHT, SPRITE_KEYS } from "../constants";
 
 class MainScene extends Phaser.Scene {
   protected ground!: TileSprite;
-  #clouds!: TileSprite;
+  protected clouds!: TileSprite;
 
   constructor(key: string) {
     super(key);
@@ -18,7 +18,7 @@ class MainScene extends Phaser.Scene {
       depth: 2,
     });
 
-    this.#clouds = this.createScrollingBg({
+    this.clouds = this.createScrollingBg({
       key: SPRITE_KEYS.clouds,
       x: 0,
       y: this.scale.height,
@@ -26,11 +26,11 @@ class MainScene extends Phaser.Scene {
       height: Math.min(this.scale.height * 0.6, CLOUDS_HEIGHT),
     });
 
-    this.#clouds.displayHeight = Math.min(
+    this.clouds.displayHeight = Math.min(
       this.scale.height * 0.6,
       CLOUDS_HEIGHT,
     );
-    this.#clouds.scaleX = this.#clouds.scaleY;
+    this.clouds.scaleX = this.clouds.scaleY;
 
     this.physics.add.existing(this.ground, true);
     this.createBirdAnimations();
@@ -51,7 +51,7 @@ class MainScene extends Phaser.Scene {
 
   update() {
     this.ground.tilePositionX += 1;
-    this.#clouds.tilePositionX += 0.4;
+    this.clouds.tilePositionX += 0.4;
   }
 
   private createScrollingBg({

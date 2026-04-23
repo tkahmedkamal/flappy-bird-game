@@ -2,6 +2,7 @@ export const SPRITE_KEYS = {
   ground: "ground",
   clouds: "clouds",
   bird: "bird",
+  pipe: "pipe",
 } as const;
 
 export const SCENES_KEYS = {
@@ -17,5 +18,6 @@ export const CLOUDS_WIDTH = 209;
 export const CLOUDS_HEIGHT = 618;
 export const BIRD_WIDTH = 90;
 export const BIRD_HEIGHT = 60;
+export const PIPE_WIDTH = 102;
+export const PIPE_HEIGHT = 604;
 export const LOOK_UP_ANGLE = 20;
-export const LOOK_DOWN_ANGLE = 90;
