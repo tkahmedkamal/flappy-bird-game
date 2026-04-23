@@ -1,4 +1,4 @@
-import { LOOK_DOWN_ANGLE, LOOK_UP_ANGLE, SPRITE_KEYS } from "../constants";
+import { LOOK_UP_ANGLE, SPRITE_KEYS } from "../constants";
 
 class Bird extends Phaser.Physics.Arcade.Sprite {
   declare body: Phaser.Physics.Arcade.Body;
@@ -34,8 +34,6 @@ class Bird extends Phaser.Physics.Arcade.Sprite {
 
     if (this.body.velocity.y < 0) {
       targetAngle = -LOOK_UP_ANGLE;
-    } else if (this.y > this.scene.scale.height * 0.7) {
-      targetAngle = LOOK_DOWN_ANGLE;
     } else {
       targetAngle = 0;
     }
