@@ -1,10 +1,10 @@
 import { SCENES_KEYS, SPRITE_KEYS } from "../constants";
 import MainScene from "./MainScene";
-import { Bird, Pipe } from "../entities";
+import { Bird, PipeManager } from "../entities";
 
 class GameScene extends MainScene {
   #bird!: Bird;
-  #pipe!: Pipe;
+  #pipeManager!: PipeManager;
   #birdGroundCollider!: Phaser.Physics.Arcade.Collider;
   #isGameOver = false;
 
@@ -25,7 +25,7 @@ class GameScene extends MainScene {
     if (!this.#isGameOver) {
       this.#bird.updateBird();
       super.update();
-      this.#pipe.recycle();
+      this.#pipeManager.recycle();
     }
 
     if (this.#bird.getBounds().top <= 0) {
@@ -43,7 +43,13 @@ class GameScene extends MainScene {
   }
 
   private createPipes() {
-    this.#pipe = new Pipe(this, 0, 0, SPRITE_KEYS.pipe, 0, this.ground.height);
+    this.#pipeManager = new PipeManager(
+      this,
+      0,
+      0,
+      SPRITE_KEYS.pipe,
+      this.ground.height,
+    );
   }
 
   private createInputs() {
@@ -52,7 +58,7 @@ class GameScene extends MainScene {
   }
 
   private createCollisions() {
-    this.physics.add.collider(this.#bird, this.#pipe.pipesGroup, () =>
+    this.physics.add.collider(this.#bird, this.#pipeManager.pipesGroup, () =>
       this.gameOver(),
     );
 
@@ -66,7 +72,7 @@ class GameScene extends MainScene {
   private gameOver() {
     if (this.#isGameOver) return;
     this.#isGameOver = true;
-    this.#pipe.pipesGroup.setVelocityX(0);
+    this.#pipeManager.pipesGroup.setVelocityX(0);
     this.input.off("pointerdown");
     this.input.keyboard?.off("keydown-SPACE");
     this.#bird.body.setVelocity(60, -160);

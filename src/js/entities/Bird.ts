@@ -1,4 +1,4 @@
-import { LOOK_UP_ANGLE, SPRITE_KEYS } from "../constants";
+import { LOOK_UP_ANGLE } from "../constants";
 
 class Bird extends Phaser.Physics.Arcade.Sprite {
   declare body: Phaser.Physics.Arcade.Body;
