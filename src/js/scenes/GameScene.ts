@@ -8,6 +8,7 @@ class GameScene extends MainScene {
   #birdGroundCollider!: Phaser.Physics.Arcade.Collider;
   #isGameOver = false;
   #gameOverContainer!: Phaser.GameObjects.Container;
+  #canStartAgain = false;
 
   constructor() {
     super(SCENES_KEYS.playScene);
@@ -15,6 +16,8 @@ class GameScene extends MainScene {
 
   create() {
     this.#isGameOver = false;
+    this.#canStartAgain = false;
+
     super.create();
     this.createBird();
     this.createPipes();
@@ -56,10 +59,13 @@ class GameScene extends MainScene {
 
   private createInputs() {
     const handleInput = () => {
-      if (this.#isGameOver) {
+      if (this.#isGameOver && this.#canStartAgain) {
         this.scene.restart();
         return;
       }
+
+      if (this.#isGameOver) return;
+
       this.#bird.flap();
     };
 
@@ -87,7 +93,7 @@ class GameScene extends MainScene {
 
     const overlay = this.add.graphics();
     overlay
-      .fillStyle(0x195e75, 0.6)
+      .fillStyle(0x195e75, 0.7)
       .fillRect(0, overlayY, this.scale.width, overlayHeight);
 
     const gameOverlayImage = this.add
@@ -105,6 +111,7 @@ class GameScene extends MainScene {
   private gameOver() {
     if (this.#isGameOver) return;
     this.#isGameOver = true;
+    this.#canStartAgain = false;
     this.#pipeManager.pipesGroup.setVelocityX(0);
     this.#bird.body.setVelocity(60, -160);
     this.#bird.setAngularVelocity(-720);
@@ -120,6 +127,10 @@ class GameScene extends MainScene {
       this.#bird.setVelocityX(0);
       this.#bird.setFrame(5);
       this.#gameOverContainer.setVisible(true);
+    });
+
+    this.time.delayedCall(1000, () => {
+      this.#canStartAgain = true;
     });
   }
 }
