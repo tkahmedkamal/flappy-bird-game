@@ -3,6 +3,7 @@ export const SPRITE_KEYS = {
   clouds: "clouds",
   bird: "bird",
   pipe: "pipe",
+  gameOver: "game-over",
 } as const;
 
 export const SCENES_KEYS = {

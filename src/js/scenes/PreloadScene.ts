@@ -43,6 +43,8 @@ class PreloadScene extends Phaser.Scene {
       startFrame: 2,
       endFrame: 3,
     });
+
+    this.load.image(SPRITE_KEYS.gameOver, "assets/game-over.png");
   }
 
   create() {

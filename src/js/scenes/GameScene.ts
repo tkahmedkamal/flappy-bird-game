@@ -7,6 +7,7 @@ class GameScene extends MainScene {
   #pipeManager!: PipeManager;
   #birdGroundCollider!: Phaser.Physics.Arcade.Collider;
   #isGameOver = false;
+  #gameOverContainer!: Phaser.GameObjects.Container;
 
   constructor() {
     super(SCENES_KEYS.playScene);
@@ -19,6 +20,7 @@ class GameScene extends MainScene {
     this.createPipes();
     this.createInputs();
     this.createCollisions();
+    this.createGameOverContainer();
   }
 
   update() {
@@ -53,8 +55,17 @@ class GameScene extends MainScene {
   }
 
   private createInputs() {
-    this.input.on("pointerdown", () => this.#bird.flap());
-    this.input.keyboard?.on("keydown-SPACE", () => this.#bird.flap());
+    const handleInput = () => {
+      if (this.#isGameOver) {
+        this.scene.restart();
+        return;
+      }
+      this.#bird.flap();
+    };
+
+    this.input.on("pointerdown", handleInput);
+
+    this.input.keyboard?.on("keydown-SPACE", handleInput);
   }
 
   private createCollisions() {
@@ -69,12 +80,32 @@ class GameScene extends MainScene {
     );
   }
 
+  private createGameOverContainer() {
+    const overlayY = this.scale.height * 0.3;
+    const overlayHeight = 130;
+    const overlayCenterY = overlayY + overlayHeight / 2;
+
+    const overlay = this.add.graphics();
+    overlay
+      .fillStyle(0x195e75, 0.6)
+      .fillRect(0, overlayY, this.scale.width, overlayHeight);
+
+    const gameOverlayImage = this.add
+      .image(this.scale.width / 2, overlayCenterY, SPRITE_KEYS.gameOver)
+      .setOrigin(0.5);
+
+    this.#gameOverContainer = this.add.container(0, 0, [
+      overlay,
+      gameOverlayImage,
+    ]);
+
+    this.#gameOverContainer.setVisible(false).setDepth(10);
+  }
+
   private gameOver() {
     if (this.#isGameOver) return;
     this.#isGameOver = true;
     this.#pipeManager.pipesGroup.setVelocityX(0);
-    this.input.off("pointerdown");
-    this.input.keyboard?.off("keydown-SPACE");
     this.#bird.body.setVelocity(60, -160);
     this.#bird.setAngularVelocity(-720);
     this.#bird.body.setGravityY(4800);
@@ -88,6 +119,7 @@ class GameScene extends MainScene {
       this.#bird.setCollideWorldBounds(false);
       this.#bird.setVelocityX(0);
       this.#bird.setFrame(5);
+      this.#gameOverContainer.setVisible(true);
     });
   }
 }
