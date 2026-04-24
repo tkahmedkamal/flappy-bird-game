@@ -17,6 +17,7 @@ class GameScene extends MainScene {
   create() {
     this.#isGameOver = false;
     this.#canStartAgain = false;
+
     super.create();
     this.createBird();
     this.createPipes();
