@@ -1,4 +1,10 @@
 body {
   margin: 0;
   background-color: #0c1a21;
+  font-family: newAmsterdam, sans-serif;
+}
+
+@font-face {
+  font-family: newAmsterdam;
+  src: url("/assets/fonts/NewAmsterdam-Regular.ttf");
 }

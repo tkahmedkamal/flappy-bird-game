@@ -1,4 +1,4 @@
-import { SCENES_KEYS, SPRITE_KEYS } from "../constants";
+import { AUDIO_KEYS, SCENES_KEYS, SPRITE_KEYS } from "../constants";
 import MainScene from "./MainScene";
 import { Bird, PipeManager } from "../entities";
 
@@ -45,6 +45,8 @@ class GameScene extends MainScene {
       (this.scale.height - this.ground.height - 200) / 2,
       SPRITE_KEYS.bird,
     );
+
+    this.#bird.flap();
   }
 
   private createPipes() {
@@ -60,7 +62,7 @@ class GameScene extends MainScene {
   private createInputs() {
     const handleInput = () => {
       if (this.#isGameOver && this.#canStartAgain) {
-        this.scene.restart();
+        this.scene.start(SCENES_KEYS.startScene);
         return;
       }
 
@@ -118,6 +120,7 @@ class GameScene extends MainScene {
     this.#bird.body.setGravityY(4800);
     this.#bird.body.setDrag(35, 0);
     this.#bird.body.setMaxVelocity(800, 2200);
+    this.sound.play(AUDIO_KEYS.fall);
     this.#bird.stop();
 
     this.time.delayedCall(100, () => {
