@@ -1,4 +1,5 @@
 import {
+  AUDIO_KEYS,
   BIRD_HEIGHT,
   BIRD_WIDTH,
   CLOUDS_HEIGHT,
@@ -45,10 +46,16 @@ class PreloadScene extends Phaser.Scene {
     });
 
     this.load.image(SPRITE_KEYS.gameOver, "assets/game-over.png");
+    this.load.image(SPRITE_KEYS.pattern, "assets/pattern.png");
+    this.load.image(SPRITE_KEYS.logo, "assets/flappy-bird-logo.png");
+    this.load.image(SPRITE_KEYS.flapBadge, "assets/flap-badge.png");
+
+    this.load.audio(AUDIO_KEYS.jump, "assets/jump.wav");
+    this.load.audio(AUDIO_KEYS.fall, "assets/fall.wav");
   }
 
   create() {
-    this.scene.start(SCENES_KEYS.playScene);
+    this.scene.start(SCENES_KEYS.startScene);
   }
 }
 

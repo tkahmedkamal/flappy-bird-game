@@ -1,4 +1,4 @@
-import { LOOK_UP_ANGLE } from "../constants";
+import { AUDIO_KEYS, LOOK_UP_ANGLE } from "../constants";
 
 class Bird extends Phaser.Physics.Arcade.Sprite {
   declare body: Phaser.Physics.Arcade.Body;
@@ -27,6 +27,7 @@ class Bird extends Phaser.Physics.Arcade.Sprite {
 
   flap() {
     this.body.setVelocityY(-250);
+    this.scene.sound.play(AUDIO_KEYS.jump);
   }
 
   updateBird() {

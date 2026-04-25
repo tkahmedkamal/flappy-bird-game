@@ -4,11 +4,20 @@ export const SPRITE_KEYS = {
   bird: "bird",
   pipe: "pipe",
   gameOver: "game-over",
+  pattern: "pattern",
+  logo: "logo",
+  flapBadge: "flap-badge",
+} as const;
+
+export const AUDIO_KEYS = {
+  jump: "jump",
+  fall: "fall",
 } as const;
 
 export const SCENES_KEYS = {
   preloadScene: "PreloadScene",
   playScene: "PlayScene",
+  startScene: "StartScene",
 } as const;
 
 export const WIDTH = 600;
@@ -22,3 +31,4 @@ export const BIRD_HEIGHT = 60;
 export const PIPE_WIDTH = 102;
 export const PIPE_HEIGHT = 604;
 export const LOOK_UP_ANGLE = 20;
+export const PATTERN_HEIGHT = 38;

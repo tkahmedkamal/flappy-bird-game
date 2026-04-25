@@ -1,6 +1,5 @@
 import Phaser from "phaser";
-import { PreloadScene } from "./scenes";
-import { GameScene } from "./scenes";
+import { PreloadScene, StartScene, GameScene } from "./scenes";
 import { HEIGHT, WIDTH } from "./constants";
 
 new Phaser.Game({
@@ -18,5 +17,5 @@ new Phaser.Game({
       debug: process.env.NODE_ENV !== "production",
     },
   },
-  scene: [PreloadScene, GameScene],
+  scene: [PreloadScene, StartScene, GameScene],
 });

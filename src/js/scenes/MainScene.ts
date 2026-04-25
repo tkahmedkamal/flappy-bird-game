@@ -1,4 +1,9 @@
-import { CLOUDS_HEIGHT, GROUND_HEIGHT, SPRITE_KEYS } from "../constants";
+import {
+  AUDIO_KEYS,
+  CLOUDS_HEIGHT,
+  GROUND_HEIGHT,
+  SPRITE_KEYS,
+} from "../constants";
 
 class MainScene extends Phaser.Scene {
   protected ground!: TileSprite;
@@ -34,6 +39,9 @@ class MainScene extends Phaser.Scene {
 
     this.physics.add.existing(this.ground, true);
     this.createBirdAnimations();
+
+    this.sound.add(AUDIO_KEYS.jump);
+    this.sound.add(AUDIO_KEYS.fall);
   }
 
   private createBirdAnimations() {
