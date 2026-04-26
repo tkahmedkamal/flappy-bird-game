@@ -7,8 +7,11 @@ class GameScene extends MainScene {
   #pipeManager!: PipeManager;
   #birdGroundCollider!: Phaser.Physics.Arcade.Collider;
   #isGameOver = false;
-  #gameOverContainer!: Phaser.GameObjects.Container;
   #canStartAgain = false;
+  #gameOverContainer!: Phaser.GameObjects.Container;
+  #score!: Phaser.GameObjects.Text;
+  #scoreNumber = 0;
+  #scoreTween!: Phaser.Tweens.BaseTween;
 
   constructor() {
     super(SCENES_KEYS.playScene);
@@ -17,8 +20,10 @@ class GameScene extends MainScene {
   create() {
     this.#isGameOver = false;
     this.#canStartAgain = false;
+    this.#scoreNumber = 0;
 
     super.create();
+    this.createScore();
     this.createBird();
     this.createPipes();
     this.createInputs();
@@ -30,6 +35,7 @@ class GameScene extends MainScene {
     if (!this.#isGameOver) {
       this.#bird.updateBird();
       super.update();
+      this.updateScore();
       this.#pipeManager.recycle();
     }
 
@@ -72,7 +78,6 @@ class GameScene extends MainScene {
     };
 
     this.input.on("pointerdown", handleInput);
-
     this.input.keyboard?.on("keydown-SPACE", handleInput);
   }
 
@@ -86,6 +91,65 @@ class GameScene extends MainScene {
       this.ground,
       () => this.gameOver(),
     );
+  }
+
+  private createScore() {
+    this.#score = this.add
+      .text(this.scale.width / 2, 50, "00", {
+        fontSize: "86px",
+        fontFamily: "newAmsterdam",
+        color: "#ffe66d",
+        stroke: "#132b36",
+        strokeThickness: 8,
+        fontStyle: "italic",
+        shadow: {
+          color: "#ff8f00",
+          offsetX: 0,
+          offsetY: 8,
+          blur: 12,
+          fill: true,
+        },
+      })
+      .setOrigin(0.5, 0)
+      .setPadding(18, 8, 18, 16)
+      .setDepth(10);
+
+    this.#scoreTween = this.tweens.add({
+      targets: this.#score,
+      scale: { from: 1, to: 1.07 },
+      duration: 650,
+      ease: "Sine.easeInOut",
+      yoyo: true,
+      repeat: -1,
+    });
+  }
+
+  private updateScore() {
+    this.#pipeManager.pipesGroup.getChildren().forEach((pipe: Sprite) => {
+      if (!pipe.flipY) return;
+      if (pipe.getData("passed")) return;
+
+      if (pipe.getBounds().right < this.#bird.x) {
+        pipe.setData("passed", true);
+        this.#scoreNumber += 1;
+        this.#score.setText(String(this.#scoreNumber).padStart(2, "0"));
+        this.sound.play(AUDIO_KEYS.passed);
+
+        this.#scoreTween.pause();
+        this.tweens.add({
+          targets: this.#score,
+          scaleX: 1.24,
+          scaleY: 1.24,
+          duration: 120,
+          ease: "Quadratic.Out",
+          yoyo: true,
+          onComplete: () => {
+            this.#score.setScale(1);
+            this.#scoreTween.resume();
+          },
+        });
+      }
+    });
   }
 
   private createGameOverContainer() {
@@ -122,6 +186,7 @@ class GameScene extends MainScene {
     this.#bird.body.setMaxVelocity(800, 2200);
     this.sound.play(AUDIO_KEYS.fall);
     this.#bird.stop();
+    this.#scoreTween.stop();
 
     this.time.delayedCall(100, () => {
       this.#birdGroundCollider.active = false;

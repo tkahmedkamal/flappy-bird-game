@@ -42,6 +42,7 @@ class MainScene extends Phaser.Scene {
 
     this.sound.add(AUDIO_KEYS.jump);
     this.sound.add(AUDIO_KEYS.fall);
+    this.sound.add(AUDIO_KEYS.passed);
   }
 
   private createBirdAnimations() {
