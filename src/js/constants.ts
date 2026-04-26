@@ -7,6 +7,8 @@ export const SPRITE_KEYS = {
   pattern: "pattern",
   logo: "logo",
   flapBadge: "flap-badge",
+  playButton: "play-button",
+  pauseButton: "pause-button",
 } as const;
 
 export const AUDIO_KEYS = {

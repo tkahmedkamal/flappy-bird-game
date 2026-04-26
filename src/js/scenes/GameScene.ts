@@ -12,6 +12,8 @@ class GameScene extends MainScene {
   #score!: Phaser.GameObjects.Text;
   #scoreNumber = 0;
   #scoreTween!: Phaser.Tweens.BaseTween;
+  #playPauseButton!: Phaser.GameObjects.Image;
+  #isPause = false;
 
   constructor() {
     super(SCENES_KEYS.playScene);
@@ -26,13 +28,14 @@ class GameScene extends MainScene {
     this.createScore();
     this.createBird();
     this.createPipes();
+    this.createPausePlayButton();
     this.createInputs();
     this.createCollisions();
     this.createGameOverContainer();
   }
 
   update() {
-    if (!this.#isGameOver) {
+    if (!this.#isGameOver && !this.#isPause) {
       this.#bird.updateBird();
       super.update();
       this.updateScore();
@@ -72,13 +75,25 @@ class GameScene extends MainScene {
         return;
       }
 
-      if (this.#isGameOver) return;
+      if (this.#isGameOver || this.#isPause) return;
 
       this.#bird.flap();
     };
 
     this.input.on("pointerdown", handleInput);
     this.input.keyboard?.on("keydown-SPACE", handleInput);
+    this.#playPauseButton.on(
+      "pointerdown",
+      (
+        _pointer: Phaser.Input.Pointer,
+        _localX: number,
+        _localY: number,
+        e: Phaser.Types.Input.EventData,
+      ) => {
+        e.stopPropagation();
+        this.togglePause();
+      },
+    );
   }
 
   private createCollisions() {
@@ -152,6 +167,40 @@ class GameScene extends MainScene {
     });
   }
 
+  private createPausePlayButton() {
+    this.#playPauseButton = this.add
+      .image(20, this.scale.height - 30, SPRITE_KEYS.pauseButton)
+      .setOrigin(0, 1)
+      .setDepth(20)
+      .setInteractive({ useHandCursor: true });
+  }
+
+  private togglePause() {
+    this.#isPause = !this.#isPause;
+
+    this.tweens.add({
+      targets: this.#playPauseButton,
+      scaleX: 0.8,
+      scaleY: 0.8,
+      duration: 250,
+      ease: "Sine.easeInOut",
+      yoyo: true,
+    });
+
+    if (this.#isPause) {
+      this.physics.world.pause();
+      this.#scoreTween.pause();
+      this.#bird.anims.pause();
+      this.#playPauseButton.setTexture(SPRITE_KEYS.playButton);
+      return;
+    }
+
+    this.physics.world.resume();
+    this.#scoreTween.resume();
+    this.#bird.anims.resume();
+    this.#playPauseButton.setTexture(SPRITE_KEYS.pauseButton);
+  }
+
   private createGameOverContainer() {
     const overlayY = this.scale.height * 0.3;
     const overlayHeight = 130;
@@ -186,7 +235,8 @@ class GameScene extends MainScene {
     this.#bird.body.setMaxVelocity(800, 2200);
     this.sound.play(AUDIO_KEYS.fall);
     this.#bird.stop();
-    this.#scoreTween.stop();
+    this.tweens.pauseAll();
+    this.#playPauseButton.setVisible(false);
 
     this.time.delayedCall(100, () => {
       this.#birdGroundCollider.active = false;
