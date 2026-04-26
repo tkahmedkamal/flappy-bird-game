@@ -12,6 +12,7 @@ export const SPRITE_KEYS = {
 export const AUDIO_KEYS = {
   jump: "jump",
   fall: "fall",
+  passed: "passed",
 } as const;
 
 export const SCENES_KEYS = {

@@ -97,6 +97,8 @@ class PipeManager {
     pipeDown.x = pipeUp.x;
     pipeUp.y = pipeVerticalPosition;
     pipeDown.y = pipeUp.y + pipeVerticalDistance;
+    pipeUp.setData("passed", false);
+    pipeDown.setData("passed", false);
   }
 
   private getMaxRightPosition() {
