@@ -49,6 +49,8 @@ class PreloadScene extends Phaser.Scene {
     this.load.image(SPRITE_KEYS.pattern, "assets/pattern.png");
     this.load.image(SPRITE_KEYS.logo, "assets/flappy-bird-logo.png");
     this.load.image(SPRITE_KEYS.flapBadge, "assets/flap-badge.png");
+    this.load.image(SPRITE_KEYS.playButton, "assets/play-button.png");
+    this.load.image(SPRITE_KEYS.pauseButton, "assets/pause-button.png");
 
     this.load.audio(AUDIO_KEYS.jump, "assets/jump.wav");
     this.load.audio(AUDIO_KEYS.fall, "assets/fall.wav");
