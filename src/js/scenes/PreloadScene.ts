@@ -55,6 +55,7 @@ class PreloadScene extends Phaser.Scene {
     this.load.audio(AUDIO_KEYS.jump, "assets/jump.wav");
     this.load.audio(AUDIO_KEYS.fall, "assets/fall.wav");
     this.load.audio(AUDIO_KEYS.passed, "assets/pickupCoin.wav");
+    this.load.audio(AUDIO_KEYS.themeMusic, "assets/theme-music.mp3");
   }
 
   create() {

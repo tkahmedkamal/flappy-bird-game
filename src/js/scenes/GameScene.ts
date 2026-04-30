@@ -192,12 +192,14 @@ class GameScene extends MainScene {
       this.#scoreTween.pause();
       this.#bird.anims.pause();
       this.#playPauseButton.setTexture(SPRITE_KEYS.playButton);
+      this.sound.pauseAll();
       return;
     }
 
     this.physics.world.resume();
     this.#scoreTween.resume();
     this.#bird.anims.resume();
+    this.sound.resumeAll();
     this.#playPauseButton.setTexture(SPRITE_KEYS.pauseButton);
   }
 
@@ -236,6 +238,7 @@ class GameScene extends MainScene {
     this.sound.play(AUDIO_KEYS.fall);
     this.#bird.stop();
     this.tweens.pauseAll();
+    this.sound.get(AUDIO_KEYS.themeMusic)?.stop();
     this.#playPauseButton.setVisible(false);
 
     this.time.delayedCall(100, () => {
