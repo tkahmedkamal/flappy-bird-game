@@ -43,6 +43,7 @@ class MainScene extends Phaser.Scene {
     this.sound.add(AUDIO_KEYS.jump);
     this.sound.add(AUDIO_KEYS.fall);
     this.sound.add(AUDIO_KEYS.passed);
+    this.playThemeMusic();
   }
 
   private createBirdAnimations() {
@@ -75,6 +76,20 @@ class MainScene extends Phaser.Scene {
       .tileSprite(x, y, width, height, key)
       .setOrigin(0, 1)
       .setDepth(depth);
+  }
+
+  private playThemeMusic() {
+    const themeTracks = this.sound.getAll(AUDIO_KEYS.themeMusic);
+    const themeMusic = themeTracks[0] ?? this.sound.add(AUDIO_KEYS.themeMusic);
+
+    themeTracks.slice(1).forEach((track) => track.destroy());
+
+    if (themeMusic.isPlaying) return;
+
+    themeMusic.play({
+      loop: true,
+      volume: 0.6,
+    });
   }
 }
 

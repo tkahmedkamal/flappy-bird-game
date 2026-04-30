@@ -15,6 +15,7 @@ export const AUDIO_KEYS = {
   jump: "jump",
   fall: "fall",
   passed: "passed",
+  themeMusic: "theme-music",
 } as const;
 
 export const SCENES_KEYS = {
