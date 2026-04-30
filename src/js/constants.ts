@@ -3,7 +3,6 @@ export const SPRITE_KEYS = {
   clouds: "clouds",
   bird: "bird",
   pipe: "pipe",
-  gameOver: "game-over",
   pattern: "pattern",
   logo: "logo",
   flapBadge: "flap-badge",
