@@ -204,22 +204,48 @@ class GameScene extends MainScene {
   }
 
   private createGameOverContainer() {
-    const overlayY = this.scale.height * 0.3;
-    const overlayHeight = 130;
+    const overlayY = this.scale.height * 0.27;
+    const overlayHeight = 165;
     const overlayCenterY = overlayY + overlayHeight / 2;
 
     const overlay = this.add.graphics();
     overlay
-      .fillStyle(0x195e75, 0.7)
+      .fillStyle(0x0e2c3b, 0.6)
       .fillRect(0, overlayY, this.scale.width, overlayHeight);
 
-    const gameOverlayImage = this.add
-      .image(this.scale.width / 2, overlayCenterY, SPRITE_KEYS.gameOver)
+    const gameOverText = this.add
+      .text(this.scale.width / 2, overlayCenterY, "Game Over", {
+        fontFamily: "newAmsterdam",
+        fontSize: "96px",
+        color: "#ffe66d",
+        stroke: "#0b1f2b",
+        strokeThickness: 12,
+        shadow: {
+          color: "#ff6f00",
+          offsetX: 0,
+          offsetY: 8,
+          blur: 16,
+          fill: true,
+        },
+      })
+      .setOrigin(0.5)
+      .setPadding(28, 8, 28, 14);
+
+    const restartHintText = this.add
+      .text(this.scale.width / 2, overlayCenterY + 52, "FLAP TO START AGAIN", {
+        fontFamily: "newAmsterdam",
+        fontSize: "34px",
+        color: "#d7f6ff",
+        stroke: "#08202c",
+        strokeThickness: 5,
+        letterSpacing: 2,
+      })
       .setOrigin(0.5);
 
     this.#gameOverContainer = this.add.container(0, 0, [
       overlay,
-      gameOverlayImage,
+      gameOverText,
+      restartHintText,
     ]);
 
     this.#gameOverContainer.setVisible(false).setDepth(10);

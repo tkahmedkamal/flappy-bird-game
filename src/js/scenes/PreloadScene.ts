@@ -45,7 +45,6 @@ class PreloadScene extends Phaser.Scene {
       endFrame: 3,
     });
 
-    this.load.image(SPRITE_KEYS.gameOver, "assets/game-over.png");
     this.load.image(SPRITE_KEYS.pattern, "assets/pattern.png");
     this.load.image(SPRITE_KEYS.logo, "assets/flappy-bird-logo.png");
     this.load.image(SPRITE_KEYS.flapBadge, "assets/flap-badge.png");
