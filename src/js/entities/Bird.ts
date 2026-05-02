@@ -20,13 +20,13 @@ class Bird extends Phaser.Physics.Arcade.Sprite {
   private init() {
     this.setCollideWorldBounds(true);
     this.setDepth(3);
-    this.body.setGravityY(800);
+    this.body.setGravityY(700);
     this.body.setVelocityY(0);
     this.play("fly");
   }
 
   flap() {
-    this.body.setVelocityY(-250);
+    this.body.setVelocityY(-280);
     this.scene.sound.play(AUDIO_KEYS.jump);
   }
 

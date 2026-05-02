@@ -35,3 +35,6 @@ export const PIPE_WIDTH = 102;
 export const PIPE_HEIGHT = 604;
 export const LOOK_UP_ANGLE = 20;
 export const PATTERN_HEIGHT = 38;
+export const PIPES_VELOCITY = -100;
+export const GROUND_SPEED = Math.abs(PIPES_VELOCITY) / 60;
+export const CLOUDS_SPEED = GROUND_SPEED * 0.4;
