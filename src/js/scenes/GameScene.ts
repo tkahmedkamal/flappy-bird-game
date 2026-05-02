@@ -1,4 +1,10 @@
-import { AUDIO_KEYS, SCENES_KEYS, SPRITE_KEYS } from "../constants";
+import {
+  AUDIO_KEYS,
+  CLOUDS_SPEED,
+  GROUND_SPEED,
+  SCENES_KEYS,
+  SPRITE_KEYS,
+} from "../constants";
 import MainScene from "./MainScene";
 import { Bird, PipeManager } from "../entities";
 
@@ -163,6 +169,8 @@ class GameScene extends MainScene {
             this.#scoreTween.resume();
           },
         });
+
+        this.increaseDifficulty();
       }
     });
   }
@@ -201,6 +209,49 @@ class GameScene extends MainScene {
     this.#bird.anims.resume();
     this.sound.resumeAll();
     this.#playPauseButton.setTexture(SPRITE_KEYS.pauseButton);
+  }
+
+  private increaseDifficulty() {
+    this.handleLevelTiers();
+    this.handleSpeedDifficulty();
+  }
+
+  private handleLevelTiers() {
+    const levels = [
+      { threshold: 40, key: "hard", frame: 2 },
+      { threshold: 20, key: "normal", frame: 1 },
+    ];
+
+    const targetLevel = levels.find(
+      (level) => this.#scoreNumber >= level.threshold,
+    );
+
+    if (targetLevel && this.#pipeManager.currentLevel !== targetLevel.key) {
+      this.#pipeManager.setDifficulty(targetLevel.key as DifficultyLevel);
+      this.#pipeManager.pipesGroup
+        .getChildren()
+        .forEach((pipe: Sprite) => pipe.setFrame(targetLevel.frame));
+      this.clouds.setFrame(targetLevel.frame);
+      this.ground.setFrame(targetLevel.frame);
+    }
+  }
+
+  private handleSpeedDifficulty() {
+    if (this.#scoreNumber % 5 !== 0) {
+      return;
+    }
+
+    const speedIncrement = 15;
+    const maxSpeed = -300;
+    const tileIncrement = speedIncrement / 60;
+    const currentVelocity = this.#pipeManager.pipesVelocity;
+    const nextSpeed = Math.max(currentVelocity - speedIncrement, maxSpeed);
+
+    if (currentVelocity > maxSpeed) {
+      this.#pipeManager.updateSpeed(nextSpeed);
+      this.groundSpeed += tileIncrement;
+      this.cloudsSpeed += tileIncrement * 0.4;
+    }
   }
 
   private createGameOverContainer() {
@@ -266,6 +317,8 @@ class GameScene extends MainScene {
     this.tweens.pauseAll();
     this.sound.get(AUDIO_KEYS.themeMusic)?.stop();
     this.#playPauseButton.setVisible(false);
+    this.groundSpeed = GROUND_SPEED;
+    this.cloudsSpeed = CLOUDS_SPEED;
 
     this.time.delayedCall(100, () => {
       this.#birdGroundCollider.active = false;

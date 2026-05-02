@@ -41,7 +41,7 @@ class PreloadScene extends Phaser.Scene {
     this.load.spritesheet(SPRITE_KEYS.pipe, "assets/pipes.png", {
       frameWidth: PIPE_WIDTH,
       frameHeight: PIPE_HEIGHT,
-      startFrame: 2,
+      startFrame: 0,
       endFrame: 3,
     });
 

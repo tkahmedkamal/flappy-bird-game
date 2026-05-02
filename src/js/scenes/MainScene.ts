@@ -1,13 +1,17 @@
 import {
   AUDIO_KEYS,
   CLOUDS_HEIGHT,
+  CLOUDS_SPEED,
   GROUND_HEIGHT,
+  GROUND_SPEED,
   SPRITE_KEYS,
 } from "../constants";
 
 class MainScene extends Phaser.Scene {
   protected ground!: TileSprite;
   protected clouds!: TileSprite;
+  protected groundSpeed = GROUND_SPEED;
+  protected cloudsSpeed = CLOUDS_SPEED;
 
   constructor(key: string) {
     super(key);
@@ -60,8 +64,8 @@ class MainScene extends Phaser.Scene {
   }
 
   update() {
-    this.ground.tilePositionX += 1;
-    this.clouds.tilePositionX += 0.4;
+    this.ground.tilePositionX += this.groundSpeed;
+    this.clouds.tilePositionX += this.cloudsSpeed;
   }
 
   private createScrollingBg({

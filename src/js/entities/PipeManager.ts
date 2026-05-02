@@ -1,16 +1,29 @@
-import { PIPE_HEIGHT } from "../constants";
-
+import { PIPES_VELOCITY, PIPE_HEIGHT } from "../constants";
 class PipeManager {
   #scene: Phaser.Scene;
   #x: number;
   #y: number;
   #texture: string;
-  #pipeHorizontalDistanceRange = [350, 400];
-  #pipeVerticalDistanceRange = [200, 250];
+  #levels: DifficultyLevels = {
+    easy: {
+      pipeVerticalDistanceRange: [200, 250],
+      pipeHorizontalTimeRangeSec: [3.4, 4.0],
+    },
+    normal: {
+      pipeVerticalDistanceRange: [150, 180],
+      pipeHorizontalTimeRangeSec: [2.9, 3.5],
+    },
+    hard: {
+      pipeVerticalDistanceRange: [120, 140],
+      pipeHorizontalTimeRangeSec: [2.4, 3.0],
+    },
+  };
+  #currentLevel: DifficultyLevel = "easy";
   #pipesNumber = 4;
   #groundHeight = 0;
   #pipesTemp: Sprite[] = [];
   pipesGroup: Phaser.Physics.Arcade.Group;
+  pipesVelocity = PIPES_VELOCITY;
 
   constructor(
     scene: Phaser.Scene,
@@ -47,21 +60,21 @@ class PipeManager {
 
       this.pipesPlacement(pipeUp, pipeDown, i);
     }
-
-    this.pipesGroup.setVelocityX(-100);
+    this.pipesGroup.setVelocityX(this.pipesVelocity);
   }
 
   private pipesPlacement(pipeUp: Sprite, pipeDown: Sprite, i: number) {
     const maxRightPosition = this.getMaxRightPosition();
-
+    const levelConfig = this.#levels[this.#currentLevel];
+    const speedPxPerSec = Math.abs(this.pipesVelocity);
+    const [tMin, tMax] = levelConfig.pipeHorizontalTimeRangeSec;
     const pipeHorizontalDistance = Phaser.Math.Between(
-      this.#pipeHorizontalDistanceRange[0],
-      this.#pipeHorizontalDistanceRange[1],
+      Math.round(tMin * speedPxPerSec),
+      Math.round(tMax * speedPxPerSec),
     );
-
     const pipeVerticalDistance = Phaser.Math.Between(
-      this.#pipeVerticalDistanceRange[0],
-      this.#pipeVerticalDistanceRange[1],
+      levelConfig.pipeVerticalDistanceRange[0],
+      levelConfig.pipeVerticalDistanceRange[1],
     );
 
     const minVerticalPos = 100;
@@ -124,6 +137,18 @@ class PipeManager {
       }
     });
   }
-}
 
+  get currentLevel() {
+    return this.#currentLevel;
+  }
+
+  setDifficulty(level: DifficultyLevel) {
+    this.#currentLevel = level;
+  }
+
+  updateSpeed(nextSpeed: number) {
+    this.pipesVelocity = nextSpeed;
+    this.pipesGroup.setVelocityX(nextSpeed);
+  }
+}
 export default PipeManager;

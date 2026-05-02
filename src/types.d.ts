@@ -17,6 +17,19 @@ declare global {
     height: number;
     depth?: number;
   };
+
+  interface DifficultyTierConfig {
+    pipeVerticalDistanceRange: [number, number];
+    pipeHorizontalTimeRangeSec: [number, number];
+  }
+
+  interface DifficultyLevels {
+    easy: DifficultyTierConfig;
+    normal: DifficultyTierConfig;
+    hard: DifficultyTierConfig;
+  }
+
+  type DifficultyLevel = keyof DifficultyLevels;
 }
 
 export {};
