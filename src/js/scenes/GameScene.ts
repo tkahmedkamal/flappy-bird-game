@@ -165,6 +165,7 @@ class GameScene extends MainScene {
           ease: "Quadratic.Out",
           yoyo: true,
           onComplete: () => {
+            if (this.#isGameOver) return;
             this.#score.setScale(1);
             this.#scoreTween.resume();
           },
@@ -259,11 +260,6 @@ class GameScene extends MainScene {
     const overlayHeight = 165;
     const overlayCenterY = overlayY + overlayHeight / 2;
 
-    const overlay = this.add.graphics();
-    overlay
-      .fillStyle(0x0e2c3b, 0.6)
-      .fillRect(0, overlayY, this.scale.width, overlayHeight);
-
     const gameOverText = this.add
       .text(this.scale.width / 2, overlayCenterY, "Game Over", {
         fontFamily: "newAmsterdam",
@@ -294,7 +290,6 @@ class GameScene extends MainScene {
       .setOrigin(0.5);
 
     this.#gameOverContainer = this.add.container(0, 0, [
-      overlay,
       gameOverText,
       restartHintText,
     ]);
@@ -314,7 +309,7 @@ class GameScene extends MainScene {
     this.#bird.body.setMaxVelocity(800, 2200);
     this.sound.play(AUDIO_KEYS.fall);
     this.#bird.stop();
-    this.tweens.pauseAll();
+    this.#scoreTween.pause();
     this.sound.get(AUDIO_KEYS.themeMusic)?.stop();
     this.#playPauseButton.setVisible(false);
     this.groundSpeed = GROUND_SPEED;
@@ -326,7 +321,21 @@ class GameScene extends MainScene {
       this.#bird.setCollideWorldBounds(false);
       this.#bird.setVelocityX(0);
       this.#bird.setFrame(5);
-      this.#gameOverContainer.setVisible(true);
+      this.#gameOverContainer.setY(150).setVisible(true);
+      this.tweens.add({
+        targets: this.#gameOverContainer,
+        y: 0,
+        duration: 500,
+        ease: "Sine.easeInOut",
+        onComplete: () => {
+          this.tweens.add({
+            targets: this.#gameOverContainer,
+            y: 0,
+            duration: 500,
+            ease: "Sine.easeInOut",
+          });
+        },
+      });
     });
 
     this.time.delayedCall(1000, () => {
