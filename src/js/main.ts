@@ -14,7 +14,7 @@ new Phaser.Game({
   physics: {
     default: "arcade",
     arcade: {
-      debug: process.env.NODE_ENV !== "production",
+      debug: import.meta.env.MODE !== "production",
     },
   },
   scene: [PreloadScene, StartScene, GameScene],
