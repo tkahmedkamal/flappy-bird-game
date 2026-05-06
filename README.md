@@ -1,6 +1,6 @@
 # Flappy Bird Game
 
-[![Flappy Bird Cover](https://i.ibb.co/S4ZsY1q/flappy-bird-github-cover.png)](https://ibb.co/tTRk1ydX)
+![Flappy Bird Cover](./public/assets/flappy-bird-github-cover.png)
 
 A simple Flappy Bird-style game built with **Phaser 3**, **TypeScript**, and **Vite**.
 
