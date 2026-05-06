@@ -15,6 +15,9 @@ class GameScene extends MainScene {
   #isGameOver = false;
   #canStartAgain = false;
   #gameOverContainer!: Phaser.GameObjects.Container;
+  #highScoreContainer!: Phaser.GameObjects.Container;
+  #currentScoreText!: Phaser.GameObjects.Text;
+  #highScoreValueText!: Phaser.GameObjects.Text;
   #score!: Phaser.GameObjects.Text;
   #scoreNumber = 0;
   #scoreTween!: Phaser.Tweens.BaseTween;
@@ -38,6 +41,7 @@ class GameScene extends MainScene {
     this.createInputs();
     this.createCollisions();
     this.createGameOverContainer();
+    this.createHighScoreContainer();
   }
 
   update() {
@@ -297,6 +301,72 @@ class GameScene extends MainScene {
     this.#gameOverContainer.setVisible(false).setDepth(10);
   }
 
+  private createHighScoreContainer() {
+    const panelWidth = 520;
+    const panelHeight = 220;
+    const panel = this.add.graphics();
+    panel
+      .fillStyle(0x0a1f2b, 0.86)
+      .fillRoundedRect(
+        -panelWidth / 2,
+        -panelHeight / 2,
+        panelWidth,
+        panelHeight,
+        28,
+      )
+      .lineStyle(6, 0xffe66d, 1)
+      .strokeRoundedRect(
+        -panelWidth / 2,
+        -panelHeight / 2,
+        panelWidth,
+        panelHeight,
+        28,
+      );
+
+    const titleText = this.add
+      .text(0, -65, "SCORES", {
+        fontFamily: "newAmsterdam",
+        fontSize: "56px",
+        color: "#ffe66d",
+        stroke: "#08202c",
+        strokeThickness: 10,
+      })
+      .setOrigin(0.5);
+
+    this.#currentScoreText = this.add
+      .text(0, -6, "Current Score : 00", {
+        fontFamily: "newAmsterdam",
+        fontSize: "44px",
+        color: "#d7f6ff",
+        stroke: "#08202c",
+        strokeThickness: 8,
+      })
+      .setOrigin(0.5);
+
+    this.#highScoreValueText = this.add
+      .text(0, 52, "High Score : 00", {
+        fontFamily: "newAmsterdam",
+        fontSize: "44px",
+        color: "#ffcf5a",
+        stroke: "#08202c",
+        strokeThickness: 8,
+      })
+      .setOrigin(0.5);
+
+    const overlayCenterY = this.scale.height * 0.27 + 165 / 2;
+    const targetY = overlayCenterY + 180;
+
+    this.#highScoreContainer = this.add
+      .container(this.scale.width / 2, targetY, [
+        panel,
+        titleText,
+        this.#currentScoreText,
+        this.#highScoreValueText,
+      ])
+      .setDepth(10)
+      .setVisible(false);
+  }
+
   private gameOver() {
     if (this.#isGameOver) return;
     this.#isGameOver = true;
@@ -314,6 +384,7 @@ class GameScene extends MainScene {
     this.#playPauseButton.setVisible(false);
     this.groundSpeed = GROUND_SPEED;
     this.cloudsSpeed = CLOUDS_SPEED;
+    this.saveScore();
 
     this.time.delayedCall(100, () => {
       this.#birdGroundCollider.active = false;
@@ -321,7 +392,16 @@ class GameScene extends MainScene {
       this.#bird.setCollideWorldBounds(false);
       this.#bird.setVelocityX(0);
       this.#bird.setFrame(5);
+      const currentScore = String(this.#scoreNumber).padStart(2, "0");
+      const highScore = String(
+        localStorage.getItem("highScore") ?? "00",
+      ).padStart(2, "0");
+      const overlayCenterY = this.scale.height * 0.27 + 165 / 2;
+      const highScoreTargetY = overlayCenterY + 200;
+      this.#currentScoreText.setText(`Current Score : ${currentScore}`);
+      this.#highScoreValueText.setText(`High Score : ${highScore}`);
       this.#gameOverContainer.setY(150).setVisible(true);
+      this.#highScoreContainer.setY(highScoreTargetY + 60).setVisible(true);
       this.tweens.add({
         targets: this.#gameOverContainer,
         y: 0,
@@ -336,11 +416,25 @@ class GameScene extends MainScene {
           });
         },
       });
+      this.tweens.add({
+        targets: this.#highScoreContainer,
+        y: highScoreTargetY,
+        duration: 500,
+        ease: "Sine.easeInOut",
+      });
     });
 
     this.time.delayedCall(1000, () => {
       this.#canStartAgain = true;
     });
+  }
+
+  private saveScore() {
+    const highScore = parseInt(localStorage.getItem("highScore") ?? "0", 10);
+
+    if (this.#scoreNumber > highScore) {
+      localStorage.setItem("highScore", String(this.#scoreNumber));
+    }
   }
 }
 
