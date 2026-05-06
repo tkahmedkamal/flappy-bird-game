@@ -51,6 +51,8 @@ class MainScene extends Phaser.Scene {
   }
 
   private createBirdAnimations() {
+    if (this.anims.exists("fly")) return;
+
     this.anims.create({
       key: "fly",
       delay: 1000,
