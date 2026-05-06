@@ -37,13 +37,12 @@ class PipeManager {
     this.#y = y;
     this.#texture = texture;
     this.#groundHeight = groundHeight ?? 0;
+    this.pipesGroup = this.#scene.physics.add.group();
 
     this.init();
   }
 
   private init() {
-    this.pipesGroup = this.#scene.physics.add.group();
-
     for (let i = 0; i < this.#pipesNumber; i++) {
       const pipeUp = this.pipesGroup
         .create(this.#x, this.#y, this.#texture)
@@ -117,7 +116,8 @@ class PipeManager {
   private getMaxRightPosition() {
     let maxRight = 0;
 
-    this.pipesGroup.getChildren().forEach((pipe: Sprite) => {
+    this.pipesGroup.getChildren().forEach((child) => {
+      const pipe = child as Sprite;
       if (pipe.x > maxRight) {
         maxRight = pipe.x;
       }
@@ -127,7 +127,8 @@ class PipeManager {
   }
 
   recycle() {
-    this.pipesGroup.getChildren().forEach((pipe: Sprite, index) => {
+    this.pipesGroup.getChildren().forEach((child, index) => {
+      const pipe = child as Sprite;
       if (pipe.getBounds().right <= 0) {
         this.#pipesTemp.push(pipe);
         if (this.#pipesTemp.length === 2) {

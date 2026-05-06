@@ -150,7 +150,8 @@ class GameScene extends MainScene {
   }
 
   private updateScore() {
-    this.#pipeManager.pipesGroup.getChildren().forEach((pipe: Sprite) => {
+    this.#pipeManager.pipesGroup.getChildren().forEach((child) => {
+      const pipe = child as Sprite;
       if (!pipe.flipY) return;
       if (pipe.getData("passed")) return;
 
@@ -235,7 +236,7 @@ class GameScene extends MainScene {
       this.#pipeManager.setDifficulty(targetLevel.key as DifficultyLevel);
       this.#pipeManager.pipesGroup
         .getChildren()
-        .forEach((pipe: Sprite) => pipe.setFrame(targetLevel.frame));
+        .forEach((child) => (child as Sprite).setFrame(targetLevel.frame));
       this.clouds.setFrame(targetLevel.frame);
       this.ground.setFrame(targetLevel.frame);
     }
